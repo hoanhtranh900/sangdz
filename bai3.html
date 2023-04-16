@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form onsubmit="submitBai1(event)">
+        <div>
+            <label>Mã sản phẩm</label>
+            <input type="text" id="productCode" name="productCode" placeholder="Nhập mã sản phẩm">
+        </div>
+        <div>
+            <label>Số lượng</label>
+            <input type="text" id="quantity" name="quantity" placeholder="Nhập lượng">
+        </div>
+      
+
+        <button type="submit">Submit</button>
+
+    </form>
+
+    <div id="result">
+
+    </div>
+    
+
+    <script>
+        function submitBai1(e) {
+            // checl null productCode or quantity
+            if(e.target.productCode.value == "" || e.target.quantity.value == "") {
+                alert("Mã sản phẩm hoặc số lượng không được để trống");
+                return;
+            }
+            e.preventDefault();
+            console.log(e);
+            let productCode = e.target.productCode.value;
+            let quantity = e.target.quantity.value;
+            quantity = Number(quantity);
+
+            fetch('http://localhost:8080/api/bai3', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    productCode,
+                    quantity
+                })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    let text;
+                    if(data.length > 0) {
+                         text = "Có tồn tại";
+                    }
+                    else {
+                         text = "Không tồn tại";
+                    }
+                    document.getElementById('result').innerHTML = text;
+                })
+            
+        }
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form onsubmit="submitBai1(event)" >
+        <div>
+            <label>Mã đơn hàng </label>
+            <input type="text" id="ordercode" name="ordercode" placeholder="Nhập mã đơn">
+        </div>
+        <div>
+            <label>Tên công ty</label>
+            <input type="text" id="companyid" name="companyid" placeholder="Nhập tên công ty">
+        </div>
+
+
+        <button type="submit">Submit</button>
+
+    </form>
+
+    <div id="result">
+
+    </div>
+    
+
+    <script>
+        function submitBai1(e) {
+
+            // check null
+            if(e.target.ordercode.value == "" || e.target.companyid.value == "") {
+                alert("Mã đơn hàng hoặc tên công ty không được để trống");
+                return;
+            }
+
+            e.preventDefault();
+            console.log(e);
+            let maDon = e.target.ordercode.value;
+            let tenCongTy = e.target.companyid.value;
+
+            fetch('http://localhost:8080/api/bai2', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    orderNumber: maDon,
+                    companyId: tenCongTy
+                })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    let text;
+                    if(data.length > 0) {
+                         text = "Có tồn tại";
+                    }
+                    else {
+                         text = "Không tồn tại";
+                    }
+                    document.getElementById('result').innerHTML = text;
+                })
+            
+        }
+
+    </script>
+</body>
+</html>

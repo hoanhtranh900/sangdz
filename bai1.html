@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form onsubmit="submitBai1(event)" >
+        <div>
+            <label>Tên chủ thẻ</label>
+            <input type="text" id="tenchu" name="tenchu" placeholder="Nhập tên chủ thẻ">
+        </div>
+        <div>
+            <label>Số thẻ</label>
+            <input type="text" id="sothe" name="sothe" placeholder="Nhập số thẻ">
+            </div>
+        <div>
+            <!-- cvv -->
+            <label>CVV</label>
+            <input type="text" id="cvv" name="cvv" placeholder="Nhập cvv">
+        </div>
+        <div>
+            <!-- type -->
+            <label>Loại thẻ</label>
+            <input type="text" id="loaithe" name="loaithe" placeholder="Nhập loại thẻ">
+        </div>
+
+        <button type="submit">Submit</button>
+
+    </form>
+
+    <div id="result">
+
+    </div>
+    
+
+    <script>
+        function submitBai1(e) {
+            //check null sothe or tenchu
+            if(e.target.tenchu.value == "" && e.target.sothe.value == "") {
+                alert("Tên chủ thẻ hoặc số thẻ không được để trống");
+                return;
+            }
+
+            e.preventDefault();
+            console.log(e);
+            let tenchu = e.target.tenchu.value;
+            let sothe = e.target.sothe.value;
+            let cvv = e.target.cvv.value;
+            let loaithe = e.target.loaithe.value;
+
+            fetch('http://localhost:8080/api/bai1', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: tenchu,
+                    number: sothe,
+                    cvv: cvv,
+                    type: loaithe
+                })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    let text;
+                    if(data.length > 0) {
+                         text = "Có tồn tại";
+                    }
+                    else {
+                         text = "Không tồn tại";
+                    }
+                    document.getElementById('result').innerHTML = text;
+                })
+            
+        }
+
+    </script>
+</body>
+</html>
